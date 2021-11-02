@@ -1,0 +1,8 @@
+PORT = 3000
+JWTSECRET = thisisthesecret
+PGHOST = localhost
+PGUSER = Nirmal
+PGDATABASE = demo
+PGPASSWORD = password
+PGPORT = 5432
+CONNECTIONSTRING = postgres://Nirmal:password@localhost/demo
