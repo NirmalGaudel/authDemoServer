@@ -4,7 +4,8 @@
     "description": "api for demo project",
     "main": "app.js",
     "scripts": {
-        "test": "nodemon start"
+        "test": "nodemon start",
+        "start":"node app.js"
     },
     "author": "Nirmal Gaudel",
     "license": "ISC",
