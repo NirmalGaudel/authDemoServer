@@ -14,6 +14,18 @@ function createAccount(payload) {
     });
 }
 
+function getAllUsers() {
+    return new Promise((resolve, reject) => {
+        const query = {
+            text: 'SELECT * FROM "public"."Users" ',
+        };
+
+        client.query(query, (err, res) =>
+            err ? reject(err) : resolve({ count: res.rowCount, rows: res.rows })
+        );
+    });
+}
+
 function getUserAccount(id) {
     return new Promise((resolve, reject) => {
         const query = {
@@ -31,7 +43,7 @@ function getUserAccountByUsername(username) {
     return new Promise((resolve, reject) => {
         const query = {
             text: `SELECT * FROM "public"."Users" WHERE username = $1 `,
-            values:[username]
+            values: [username],
         };
 
         client.query(query, (err, res) =>
@@ -57,4 +69,5 @@ module.exports = {
     getUserAccount,
     getUserAccountByUsername,
     checkLogin,
+    getAllUsers,
 };

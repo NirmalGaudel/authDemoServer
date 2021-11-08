@@ -6,12 +6,16 @@ require("dotenv").config();
 const db = require("./database/db");
 const { authRouter } = require("./Routes/authRoute");
 const tokenValidator = require("./middlewares/tokenValidator");
+const { userRouter } = require("./Routes/usersRoute");
 const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRouter);
+
+app.use("/users", tokenValidator, userRouter);
+
 app.get("/profile", tokenValidator, (req, res, next) => res.send(req.user));
 
 app.use((req, res, next) => next(makeError(404, "not found")));
