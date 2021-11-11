@@ -1,5 +1,5 @@
 const { body } = require("express-validator");
-const { getUserAccountByUsername } = require("../models/adminModel");
+const { getUserAccountByUsername, getUserAccount } = require("../models/adminModel");
 
 function createAccountValidator() {
     return [
@@ -7,24 +7,16 @@ function createAccountValidator() {
             .exists()
             .withMessage("username is required")
             .custom(
-                (username) =>
+                username =>
                     new Promise(async (resolve, reject) => {
-                        const result = await getUserAccountByUsername(
-                            username
-                        ).catch((e) => reject(e));
+                        const result = await getUserAccountByUsername(username).catch(e =>
+                            reject(e)
+                        );
                         if (result) reject("Username Already Exists");
                         else resolve();
                     })
             ),
-        //     getUserAccountByUsername(username)
-        //         .then((d) => {
-        //             console.log("data is ", d);
-        //             return d
-        //                 ? Promise.reject("username already exists")
-        //                 : Promise.resolve();
-        //         })
-        //         .catch((err) => Promise.reject(err.message || "db Error"))
-        // ),
+
         body("firstname").exists().withMessage("firstname is required"),
         body("lastname").exists().withMessage("lastname is required"),
         body("password")
@@ -43,4 +35,34 @@ function loginValidator() {
     ];
 }
 
-module.exports = { loginValidator, createAccountValidator };
+function updateUserValidator() {
+    return [
+        body("id")
+            .exists()
+            .withMessage("id is required")
+            .custom(
+                id =>
+                    new Promise(async (resolve, reject) => {
+                        const result = await getUserAccount(id).catch(e => reject(e));
+                        if (!result) reject("User doesn't exist");
+                        else resolve();
+                    })
+            ),
+        body("username")
+            .exists()
+            .withMessage("username is required")
+            .custom(
+                un =>
+                    new Promise(async (resolve, reject) => {
+                        const result = await getUserAccountByUsername(un).catch(e => reject(e));
+                        if (result) reject("Username Already Exists");
+                        else resolve();
+                    })
+            ),
+
+        body("firstname").exists().withMessage("firstname is required"),
+        body("lastname").exists().withMessage("lastname is required"),
+    ];
+}
+
+module.exports = { loginValidator, createAccountValidator,updateUserValidator };
